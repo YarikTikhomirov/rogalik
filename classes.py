@@ -184,12 +184,19 @@ class Room:
     #ВХОД В КОМНАТЫ
     def enter_room(self, hero):
         print('ты зашел в крутую комнату и в ней ты встретил', self.enemy.name)
-        answer = int(input('напиши 1, чтобы начать схватку, или напиши 2, чтобы заныть: '))
-        print('--------------------------------------------------')
-        if answer == 1:
-            self.start_fight(hero)
-        elif answer == 2:
-            self.zanit(hero)
+        while True:
+            try:
+                answer = int(input('напиши 1, чтобы начать схватку, или напиши 2, чтобы заныть: '))
+                print('--------------------------------------------------')
+                if answer == 1:
+                    self.start_fight(hero)
+                    break
+                elif answer == 2:
+                    self.zanit(hero)
+                    break
+            except ValueError:
+                print('надо ввести число 1 или 2')
+            
 
     
     #БОЁВКА

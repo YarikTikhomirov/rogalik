@@ -39,12 +39,12 @@ kozha_gadzilli = Armor('кожа годзиллы', 20, 2000000000000)
 
 
 swordman = Character('мечник', sword, leather, 24)
-meowl = Character('мяуовл', stick, meowl_feather, 2)
+meowl = Character('мяуовл', gadzilla_lazer, meowl_feather, 10)
 rat_larisa = Character('крыска лариска', rat_claws, rat_shkurka, 4)
 slime = Character('обычный слизень', slime_ball, none, 5)
 goblin = Character('гоблин', knife, none, 13)
 boss_rostics = Character('босс роситкс', wings_kfc, kfc_bucket, 6 )
-cheburek = Hero('чебурек с мясом', fist, potato, 100, 15)
+cheburek = Hero('чебурек с мясом', fist, potato, 100, 11000000000000000000000000)
 oge = Character('экзамен ОГЭ', integraly, oblozhka, 20)
 crocodile = Character('крокодил', crocodile_theeth, kozha_krokodila, 25)
 alien = Character('иноплонетян', alien_blaster, none, 30)
@@ -66,6 +66,8 @@ goblin_room = Room(goblin)
 
 rostics = Room(boss_rostics)
 
+meowl_room = Room(meowl)
+
 
 ekzamen = Room(oge)
 
@@ -75,7 +77,7 @@ tarelka = Room(alien)
 
 boss_room = Room(gadzilla)
 
-spisok_komnat = [dump, slime_room, rostics, goblin_room, ekzamen, common_room, boloto, tarelka, boss_room]
+spisok_komnat = [dump, slime_room, rostics, goblin_room, ekzamen, common_room, boloto, tarelka, boss_room, meowl_room]
 
 epic_dungeon = Dungeon(spisok_komnat)
 

@@ -1,5 +1,6 @@
 from time import sleep
 from random import randint 
+import json
 
 class Character:
     def __init__(self, name, weapon, armor, hp):
@@ -268,37 +269,49 @@ class Room:
 
 
 class Dungeon:
-    def __init__(self, rooms):
+    def __init__(self, rooms, hero, trader):
         self.rooms = rooms
+        self.hero = hero
+        self.trader = trader
         self.current_room = 0
+        
     
     def next_room(self, hero):               
         self.rooms[self.current_room].enter_room(hero)
         self.current_room += 1
 
-    def dungeon_manager(self, hero, trader):
+    def dungeon_manager(self):
         while True:
             c =  int(input('напиши 1, если хочешь зайти в следующую комнату \nнапиши 2, чтобы зайти в магазин \nнапиши 3, чтобы зайти в инвентарь: '))
             print('--------------------------------------------------')
-            if c == 1:       
-                self.next_room(hero)
-            elif c == 2:
-                trader.trader_manager(hero)
-                
-            elif c == 3:
-                hero.inventory_manager()
 
+            if c == 1:       
+                self.next_room(self.hero)
+            elif c == 2:
+                self.trader.trader_manager(self.hero)                
+            elif c == 3:
+                self.hero.inventory_manager()
+            elif c == 4:
+                self.save_data()
+            elif c == 5:
+                self.load_data()
             else:
                 print('нет действия под таким номером')
+
             if self.current_room == len(self.rooms):
                 print('Поздравляю с проходением игры!')
-                break
-            
+                break          
 
-            if hero.hp <= 0:
+            if self.hero.hp <= 0:
                 print('Вы проиграли!')
                 break
 
+    def save_data(self):
+        with open("save.json", "w", encoding="utf-8") as file:
+            json.dump(self.hero, file, ensure_ascii=False, indent=4)
+
+    def load_data(self):
+        pass
         
 
             

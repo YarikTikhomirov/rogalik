@@ -79,9 +79,9 @@ boss_room = Room(gadzilla)
 
 spisok_komnat = [dump, slime_room, rostics, goblin_room, ekzamen, common_room, boloto, tarelka, boss_room, meowl_room]
 
-epic_dungeon = Dungeon(spisok_komnat)
+epic_dungeon = Dungeon(spisok_komnat, cheburek, zhabka_stonks)
 
-epic_dungeon.dungeon_manager(cheburek, zhabka_stonks)
+epic_dungeon.dungeon_manager()
 
   
       

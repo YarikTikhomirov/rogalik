@@ -282,7 +282,7 @@ class Dungeon:
 
     def dungeon_manager(self):
         while True:
-            c =  int(input('напиши 1, если хочешь зайти в следующую комнату \nнапиши 2, чтобы зайти в магазин \nнапиши 3, чтобы зайти в инвентарь: '))
+            c =  int(input('напиши 1, если хочешь зайти в следующую комнату \nнапиши 2, чтобы зайти в магазин \nнапиши 3, чтобы зайти в инвентарь \nнапиши 4, чтобы сохраниться \nнапиши 5, чтобы загрузить файл сохранения: '))
             print('--------------------------------------------------')
 
             if c == 1:       
@@ -307,11 +307,33 @@ class Dungeon:
                 break
 
     def save_data(self):
+        data = {
+            'name': self.hero.name,
+            'weapon': {
+                'name': self.hero.weapon.name,
+                'dmg': self.hero.weapon.dmg, 
+                'price': self.hero.weapon.price
+            },
+            'armor': {
+                'name': self.hero.armor.name,
+                'df' : self.hero.armor.df,
+                'price' : self.hero.armor.price
+            },
+            'hp' : self.hero.hp,
+            'money' : self.hero.money        
+        }
         with open("save.json", "w", encoding="utf-8") as file:
-            json.dump(self.hero, file, ensure_ascii=False, indent=4)
+            json.dump(data, file, ensure_ascii=False, indent=4)
+        print('файл успешно сохранен')
 
     def load_data(self):
-        pass
+        with open("save.json", "r", encoding="utf-8") as file:
+            data = json.load(file)  
         
-
-            
+        name = data['name']
+        weapon = Weapon(data['weapon']['name'], data['weapon']['dmg'],  data['weapon']['price'])
+        armor = Armor(data['armor']['name'], data['armor']['df'], data['armor']['price'])
+        hp = data['hp']   
+        money = data['money']
+        self.hero = Hero(name, weapon, armor, hp, money)
+        print('файл успешно загружен')

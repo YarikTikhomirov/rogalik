@@ -1,6 +1,7 @@
 from time import sleep
 from random import randint 
 import json
+import os
 
 class Character:
     def __init__(self, name, weapon, armor, hp):
@@ -10,10 +11,10 @@ class Character:
         self.hp = hp
 
 class Hero(Character):
-    def __init__(self, name, weapon, armor, hp, money):
+    def __init__(self, name, weapon, armor, hp, money, inventory=[]):
         super().__init__(name, weapon, armor, hp)
         self.money = money 
-        self.inventory = [] 
+        self.inventory = inventory 
 
      #ИНВЕНТАРЬ
     def inventory_manager(self):
@@ -46,7 +47,13 @@ class Hero(Character):
 
     def equip(self):
         self.show_hero_inventory()
-        n = int(input('выбери предмет, который хочешь экипировать или съесть: '))
+
+        try:
+            n = int(input('выбери предмет, который хочешь экипировать или съесть: '))
+        except:
+            print('напиши цифру!')
+            return
+        
         print('--------------------------------------------------')
         if n > len(self.inventory) or n < 1:
             print('в списке нету предмета с таким номером')
@@ -61,9 +68,9 @@ class Hero(Character):
 
             elif isinstance(self.inventory[n - 1], Healings):
                 self.hp += self.inventory[n - 1].heal
-                self.inventory.pop(n - 1)
                 print(f'вы восполнили своё здровье на {self.inventory[n - 1].heal} едениц ')
                 print('--------------------------------------------------')
+                self.inventory.pop(n - 1)
             
 
         
@@ -150,7 +157,7 @@ class Shop:
             return
         hero.show_hero_inventory()
         u = int(input("Укажи номер пердмета: "))
-        if u > len(hero.inventory) or u < len(hero.inventory):
+        if u > len(hero.inventory) or u < 1:
             print('такого предмета нет в списке')
             print('--------------------------------------------------')
             return
@@ -282,7 +289,7 @@ class Dungeon:
 
     def dungeon_manager(self):
         while True:
-            c =  int(input('напиши 1, если хочешь зайти в следующую комнату \nнапиши 2, чтобы зайти в магазин \nнапиши 3, чтобы зайти в инвентарь \nнапиши 4, чтобы сохраниться \nнапиши 5, чтобы загрузить файл сохранения: '))
+            c =  int(input('напиши 1, если хочешь зайти в следующую комнату \nнапиши 2, чтобы зайти в магазин \nнапиши 3, чтобы зайти в инвентарь \nнапиши 4, чтобы сохраниться \nнапиши 5, чтобы загрузить файл сохранения \nваш выбор: '))
             print('--------------------------------------------------')
 
             if c == 1:       
@@ -300,13 +307,18 @@ class Dungeon:
 
             if self.current_room == len(self.rooms):
                 print('Поздравляю с проходением игры!')
+                self.delete_save()
                 break          
-
+                                                                                                
             if self.hero.hp <= 0:
                 print('Вы проиграли!')
                 break
 
     def save_data(self):
+        inventory = []
+        for i in self.hero.inventory:
+           item = self.convert_item(i)
+           inventory.append(item)
         data = {
             'name': self.hero.name,
             'weapon': {
@@ -320,13 +332,19 @@ class Dungeon:
                 'price' : self.hero.armor.price
             },
             'hp' : self.hero.hp,
-            'money' : self.hero.money        
+            'money' : self.hero.money,        
+            'inventory' : inventory,
+            'current_room' : self.current_room
+
         }
         with open("save.json", "w", encoding="utf-8") as file:
             json.dump(data, file, ensure_ascii=False, indent=4)
         print('файл успешно сохранен')
 
     def load_data(self):
+        if not os.path.exists("save.json"):
+            print('нет данных для загрузки')
+            return
         with open("save.json", "r", encoding="utf-8") as file:
             data = json.load(file)  
         
@@ -335,5 +353,44 @@ class Dungeon:
         armor = Armor(data['armor']['name'], data['armor']['df'], data['armor']['price'])
         hp = data['hp']   
         money = data['money']
-        self.hero = Hero(name, weapon, armor, hp, money)
+        self.current_room = data['current_room']
+
+        z = 1
+        inventory = []
+        for i in data['inventory']:
+            if 'df' in i:
+                globals()[f"item{z}"] = Armor(i['name'], i['df'], i['price'])
+                inventory.append(globals()[f"item{z}"])
+                z += 1
+
+        self.hero = Hero(name, weapon, armor, hp, money, inventory)
         print('файл успешно загружен')
+
+    def convert_item(self, item):
+        if isinstance(item, Armor):
+            armor = {
+                'name': item.name,
+                'df': item.df,
+                'price': item.price
+            }
+            return armor    
+        elif isinstance(item, Weapon):
+            weapon = {
+                'name': item.name,
+                'dmg': item.dmg,
+                'price': item.price
+            }
+            return weapon
+        elif isinstance(item, Healings):
+            healings = {
+                'name': item.name,
+                'heal': item.heal,
+                'price': item.price
+            }
+            return healings
+        
+    def delete_save(self):
+        try:
+            os.remove('save.json')
+        except:
+            return        

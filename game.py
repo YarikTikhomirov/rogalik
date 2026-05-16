@@ -26,10 +26,10 @@ toad_sword = Weapon('жабий меч', 35, 100)
 none = Armor('нет брони', 0, 0)
 rat_shkurka = Armor('шкурка крыски', 0.5, 3)
 potato = Armor('мешок из под кортошки ', 2, 5)
-leather = Armor('кожаная броня', 6, 50)
-iron_armor = Armor('железная броня' , 10, 75)
+leather = Armor('кожаная броня', 6, 25)
+iron_armor = Armor('железная броня' , 10, 50)
 kfc_bucket = Armor('ведро острых крылышек ростикис', 1, 40)
-amongus = Armor('крутая броня', 30, 555)
+amongus = Armor('крутая броня', 25, 150)
 meowl_feather = Armor('перо меовла', 99, 1000000000000)
 beret = Armor('французкий берет', 5, 10)
 oblozhka = Armor('обложка', 6, 45)
@@ -49,7 +49,7 @@ oge = Character('экзамен ОГЭ', integraly, oblozhka, 20)
 crocodile = Character('крокодил', crocodile_theeth, kozha_krokodila, 25)
 alien = Character('иноплонетян', alien_blaster, none, 30)
 gadzilla = Character('годзилла', gadzilla_lazer, kozha_gadzilli, 100)
-zhabka_inventory = [beret,  bagget, knife, sword, toad_sword, leather, iron_armor ,purple_stick, amongus, bandages, medkit, healing_potion, kvas]
+zhabka_inventory = [beret,  bagget, knife, sword, toad_sword, leather, iron_armor ,amongus, purple_stick, bandages, medkit, healing_potion, kvas]
 zhabka_stonks = Shop('жабка торговец', zhabka_inventory, 1000 )
 
 
@@ -77,7 +77,7 @@ tarelka = Room(alien)
 
 boss_room = Room(gadzilla)
 
-spisok_komnat = [dump, slime_room, rostics, goblin_room, ekzamen, common_room, boloto, tarelka, boss_room, meowl_room]
+spisok_komnat = [dump, slime_room, rostics, goblin_room, ekzamen, common_room, boloto, tarelka, boss_room]
 
 epic_dungeon = Dungeon(spisok_komnat, cheburek, zhabka_stonks)
 
